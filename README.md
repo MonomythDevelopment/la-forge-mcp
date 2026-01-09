@@ -335,7 +335,3 @@ rm -rf ~/.la-forge-mcp
 MIT — see [LICENSE](LICENSE)
 
 ---
-
-## Why "La Forge"?
-
-This tool gives AI coding assistants the visual perception they lack — like a visor that lets them see what's really happening with your CSS.
