@@ -36,20 +36,24 @@ REPO_URL="${LA_FORGE_REPO:-https://github.com/MonomythDevelopment/la-forge-mcp.g
 # Check prerequisites
 echo -e "${BLUE}Checking prerequisites...${NC}"
 
-if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}✗ Python 3 not found${NC}"
+if ! command -v node &> /dev/null; then
+    echo -e "${RED}✗ Node.js not found${NC}"
+    echo -e "${YELLOW}Install Node.js 18+ first: https://nodejs.org${NC}"
     exit 1
 fi
 
-PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d. -f1)
-PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d. -f2)
-
-if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 10 ]); then
-    echo -e "${RED}✗ Python 3.10+ required (found $PYTHON_VERSION)${NC}"
+NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
+if [ "$NODE_VERSION" -lt 18 ]; then
+    echo -e "${RED}✗ Node.js 18+ required (found v$NODE_VERSION)${NC}"
     exit 1
 fi
-echo -e "${GREEN}✓ Python $PYTHON_VERSION${NC}"
+echo -e "${GREEN}✓ Node.js $(node -v)${NC}"
+
+if ! command -v npm &> /dev/null; then
+    echo -e "${RED}✗ npm not found${NC}"
+    exit 1
+fi
+echo -e "${GREEN}✓ npm $(npm -v)${NC}"
 
 if ! command -v claude &> /dev/null; then
     echo -e "${RED}✗ Claude CLI not found${NC}"
@@ -78,32 +82,29 @@ else
     cd "$INSTALL_DIR"
 fi
 
-# Create virtual environment
+# Install dependencies and build
 echo ""
-echo -e "${BLUE}Setting up Python environment...${NC}"
-
-if [ ! -d ".venv" ]; then
-    python3 -m venv .venv
-fi
-
-source .venv/bin/activate
-pip install --upgrade pip > /dev/null 2>&1
-pip install -r requirements.txt
+echo -e "${BLUE}Installing dependencies...${NC}"
+npm install
 echo -e "${GREEN}✓ Dependencies installed${NC}"
+
+echo ""
+echo -e "${BLUE}Building TypeScript...${NC}"
+npm run build
+echo -e "${GREEN}✓ Build complete${NC}"
 
 # Register with Claude Code
 echo ""
 echo -e "${BLUE}Registering with Claude Code...${NC}"
 
-PYTHON_PATH="$INSTALL_DIR/.venv/bin/python"
-SERVER_PATH="$INSTALL_DIR/server.py"
+SERVER_PATH="$INSTALL_DIR/dist/index.js"
 
 # Remove existing if present
 if claude mcp list 2>/dev/null | grep -q "la-forge"; then
     claude mcp remove la-forge -s user 2>/dev/null || true
 fi
 
-claude mcp add la-forge "$PYTHON_PATH" "$SERVER_PATH" -s user
+claude mcp add la-forge node "$SERVER_PATH" -s user
 echo -e "${GREEN}✓ Registered with Claude Code${NC}"
 
 # Detect Chrome

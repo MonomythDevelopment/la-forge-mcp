@@ -36,8 +36,6 @@ curl -fsSL https://raw.githubusercontent.com/MonomythDevelopment/la-forge-mcp/ma
 irm https://raw.githubusercontent.com/MonomythDevelopment/la-forge-mcp/main/install-remote.ps1 | iex
 ```
 
-
-
 ### Manual Install
 
 ```bash
@@ -54,7 +52,7 @@ chmod +x install.sh
 
 ## Requirements
 
-- Python 3.10+
+- Node.js 18+
 - Claude Code CLI (`claude` command)
 - Google Chrome or Chromium
 
@@ -242,7 +240,7 @@ set CHROME_PATH="C:\Program Files\Google\Chrome\Application\chrome.exe"
 ## How It Works
 
 ### Pixel Diffing
-Uses PIL/NumPy to compare images pixel-by-pixel. Outputs a diff image with mismatched areas highlighted in magenta. Connected components analysis (scipy) identifies distinct problem regions.
+Uses sharp to compare images pixel-by-pixel. Outputs a diff image with mismatched areas highlighted in magenta. Connected components analysis identifies distinct problem regions.
 
 ### Computed Style Extraction  
 Uses Chrome DevTools Protocol to query `window.getComputedStyle()` for any element. Shows the *actual* applied values after CSS cascade, not just source file values.
@@ -258,10 +256,10 @@ Iterates through all stylesheets via CDP to find every rule matching an element.
 
 ```bash
 # Test directly
-~/.la-forge-mcp/.venv/bin/python ~/.la-forge-mcp/server.py
+node ~/.la-forge-mcp/dist/index.js
 
 # Should hang waiting for input (Ctrl+C to exit)
-# If errors appear, check Python version and dependencies
+# If errors appear, check Node version and run npm install
 ```
 
 ### "Chrome not found"
@@ -279,22 +277,44 @@ Or use `start_chrome()` tool which does this automatically.
 
 ### Module import errors
 
-Reinstall dependencies:
+Reinstall and rebuild:
 ```bash
 cd ~/.la-forge-mcp
-source .venv/bin/activate
-pip install --upgrade mcp aiohttp pillow numpy scipy
+npm install
+npm run build
 ```
 
 ### Claude Code shows "Failed to connect"
 
-1. Check paths are absolute: `claude mcp get la-forge`
+1. Check registration: `claude mcp get la-forge`
 2. Test server manually (see above)
 3. Remove and re-add:
    ```bash
    claude mcp remove la-forge -s user
-   claude mcp add la-forge ~/.la-forge-mcp/.venv/bin/python ~/.la-forge-mcp/server.py -s user
+   claude mcp add la-forge node ~/.la-forge-mcp/dist/index.js -s user
    ```
+
+---
+
+## Development
+
+```bash
+# Clone
+git clone https://github.com/MonomythDevelopment/la-forge-mcp.git
+cd la-forge-mcp
+
+# Install deps
+npm install
+
+# Development (with hot reload)
+npm run dev
+
+# Build
+npm run build
+
+# Run built version
+npm start
+```
 
 ---
 

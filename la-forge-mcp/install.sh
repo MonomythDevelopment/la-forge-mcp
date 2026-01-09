@@ -41,20 +41,24 @@ echo ""
 # Check prerequisites
 echo -e "${BLUE}Checking prerequisites...${NC}"
 
-if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}✗ Python 3 not found${NC}"
+if ! command -v node &> /dev/null; then
+    echo -e "${RED}✗ Node.js not found${NC}"
+    echo -e "${YELLOW}Install Node.js 18+ first: https://nodejs.org${NC}"
     exit 1
 fi
 
-PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d. -f1)
-PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d. -f2)
-
-if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 10 ]); then
-    echo -e "${RED}✗ Python 3.10+ required (found $PYTHON_VERSION)${NC}"
+NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
+if [ "$NODE_VERSION" -lt 18 ]; then
+    echo -e "${RED}✗ Node.js 18+ required (found v$NODE_VERSION)${NC}"
     exit 1
 fi
-echo -e "${GREEN}✓ Python $PYTHON_VERSION${NC}"
+echo -e "${GREEN}✓ Node.js $(node -v)${NC}"
+
+if ! command -v npm &> /dev/null; then
+    echo -e "${RED}✗ npm not found${NC}"
+    exit 1
+fi
+echo -e "${GREEN}✓ npm $(npm -v)${NC}"
 
 if ! command -v claude &> /dev/null; then
     echo -e "${RED}✗ Claude CLI not found${NC}"
@@ -68,9 +72,9 @@ echo ""
 if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then
     echo -e "${BLUE}Copying files to $INSTALL_DIR...${NC}"
     mkdir -p "$INSTALL_DIR"
-    cp "$SCRIPT_DIR/server.py" "$INSTALL_DIR/"
-    cp "$SCRIPT_DIR/requirements.txt" "$INSTALL_DIR/"
-    cp "$SCRIPT_DIR/pyproject.toml" "$INSTALL_DIR/"
+    cp -r "$SCRIPT_DIR/src" "$INSTALL_DIR/"
+    cp "$SCRIPT_DIR/package.json" "$INSTALL_DIR/"
+    cp "$SCRIPT_DIR/tsconfig.json" "$INSTALL_DIR/"
     cp "$SCRIPT_DIR/README.md" "$INSTALL_DIR/"
     cp "$SCRIPT_DIR/CLAUDE_SNIPPET.md" "$INSTALL_DIR/" 2>/dev/null || true
     echo -e "${GREEN}✓ Files copied${NC}"
@@ -78,29 +82,20 @@ else
     echo -e "${BLUE}Installing in place...${NC}"
 fi
 
-# Create virtual environment
-echo ""
-echo -e "${BLUE}Creating virtual environment...${NC}"
-cd "$INSTALL_DIR"
-
-if [ ! -d ".venv" ]; then
-    python3 -m venv .venv
-    echo -e "${GREEN}✓ Virtual environment created${NC}"
-else
-    echo -e "${YELLOW}Virtual environment exists${NC}"
-fi
-
-# Install dependencies
+# Install dependencies and build
 echo ""
 echo -e "${BLUE}Installing dependencies...${NC}"
-source .venv/bin/activate
-pip install --upgrade pip > /dev/null 2>&1
-pip install -r requirements.txt
+cd "$INSTALL_DIR"
+npm install
 echo -e "${GREEN}✓ Dependencies installed${NC}"
 
-# Get absolute paths
-PYTHON_PATH="$INSTALL_DIR/.venv/bin/python"
-SERVER_PATH="$INSTALL_DIR/server.py"
+echo ""
+echo -e "${BLUE}Building TypeScript...${NC}"
+npm run build
+echo -e "${GREEN}✓ Build complete${NC}"
+
+# Get absolute path to built script
+SERVER_PATH="$INSTALL_DIR/dist/index.js"
 
 # Register with Claude Code
 echo ""
@@ -111,7 +106,7 @@ if claude mcp list 2>/dev/null | grep -q "la-forge"; then
     claude mcp remove la-forge -s user 2>/dev/null || true
 fi
 
-claude mcp add la-forge "$PYTHON_PATH" "$SERVER_PATH" -s user
+claude mcp add la-forge node "$SERVER_PATH" -s user
 echo -e "${GREEN}✓ Registered with Claude Code (user level)${NC}"
 
 # Detect Chrome
