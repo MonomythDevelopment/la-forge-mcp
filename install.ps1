@@ -3,7 +3,7 @@
     La Forge MCP - Local Installation Script for Windows
 
 .DESCRIPTION
-    "I can see things others can't."
+    A pixel-perfect visor for AI coding assistants.
     Run this after cloning the repository locally.
 #>
 
@@ -22,7 +22,7 @@ Write-Host @"
 
 "@ -ForegroundColor Cyan
 
-Write-Host '"I can see things others cannot."' -ForegroundColor Blue
+Write-Host "A pixel-perfect visor for AI coding assistants." -ForegroundColor Blue
 Write-Host ""
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -176,5 +176,5 @@ Write-Host "  • quick_visual_check()        • compare_elements(selector, exp
 Write-Host ""
 Write-Host "Installation Location: $InstallDir" -ForegroundColor Blue
 Write-Host ""
-Write-Host '"It is not just what you look at, it is what you see."' -ForegroundColor Cyan
+Write-Host "Seeing what AI cannot." -ForegroundColor Cyan
 Write-Host ""

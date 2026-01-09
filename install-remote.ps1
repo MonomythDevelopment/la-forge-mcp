@@ -3,7 +3,7 @@
     La Forge MCP - Remote Installation Script for Windows
 
 .DESCRIPTION
-    "I can see things others can't."
+    A pixel-perfect visor for AI coding assistants.
     Usage: irm https://raw.githubusercontent.com/MonomythDevelopment/la-forge-mcp/main/install-remote.ps1 | iex
 #>
 
@@ -22,7 +22,7 @@ Write-Host @"
 
 "@ -ForegroundColor Cyan
 
-Write-Host '"I can see things others cannot."' -ForegroundColor Blue
+Write-Host "A pixel-perfect visor for AI coding assistants." -ForegroundColor Blue
 Write-Host ""
 
 $InstallDir = "$env:USERPROFILE\.la-forge-mcp"
@@ -159,5 +159,5 @@ Write-Host "  • start_chrome(url)           • capture_reference(name)"
 Write-Host "  • verify_against_reference()  • get_element_debug_info(selector)"
 Write-Host "  • quick_visual_check()        • compare_elements(selector, expected)"
 Write-Host ""
-Write-Host '"It is not just what you look at, it is what you see."' -ForegroundColor Cyan
+Write-Host "Seeing what AI cannot." -ForegroundColor Cyan
 Write-Host ""

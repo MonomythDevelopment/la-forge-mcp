@@ -94,6 +94,18 @@ if (!fs.existsSync(REF_DIR)) {
   fs.mkdirSync(REF_DIR, { recursive: true });
 }
 
+/**
+ * Sanitize a reference name to prevent path traversal attacks.
+ * Removes path separators and special characters.
+ */
+function sanitizeName(name: string): string {
+  return name
+    .replace(/[/\\]/g, "_")      // Replace path separators
+    .replace(/\.\./g, "_")       // Remove parent directory references
+    .replace(/[<>:"|?*]/g, "_")  // Remove Windows-invalid characters
+    .substring(0, 100);          // Limit length
+}
+
 // =============================================================================
 // CDP (Chrome DevTools Protocol) Connection Utilities
 // =============================================================================
@@ -675,10 +687,11 @@ async function captureReference(
   fullPage = false
 ): Promise<string> {
   try {
+    const safeName = sanitizeName(name);
     const screenshotData = await captureScreenshot(fullPage);
-    const screenshotPath = path.join(REF_DIR, `${name}.png`);
+    const screenshotPath = path.join(REF_DIR, `${safeName}.png`);
     fs.writeFileSync(screenshotPath, screenshotData);
-    state.screenshots.set(name, screenshotPath);
+    state.screenshots.set(safeName, screenshotPath);
 
     const stylesData: Record<string, ComputedStyles> = {};
     if (selectors && selectors.length > 0) {
@@ -694,14 +707,14 @@ async function captureReference(
       }
     }
 
-    state.styles.set(name, stylesData);
+    state.styles.set(safeName, stylesData);
 
-    const stylesPath = path.join(REF_DIR, `${name}_styles.json`);
+    const stylesPath = path.join(REF_DIR, `${safeName}_styles.json`);
     fs.writeFileSync(stylesPath, JSON.stringify(stylesData, null, 2));
 
     return JSON.stringify({
       success: true,
-      name,
+      name: safeName,
       screenshot_path: screenshotPath,
       styles_path: stylesPath,
       selectors_captured: Object.keys(stylesData),
@@ -720,34 +733,36 @@ async function verifyAgainstReference(
   checkStyles = true
 ): Promise<string> {
   try {
+    const safeName = sanitizeName(name);
+
     // Load reference if not in memory
-    if (!state.screenshots.has(name)) {
-      const screenshotPath = path.join(REF_DIR, `${name}.png`);
-      const stylesPath = path.join(REF_DIR, `${name}_styles.json`);
+    if (!state.screenshots.has(safeName)) {
+      const screenshotPath = path.join(REF_DIR, `${safeName}.png`);
+      const stylesPath = path.join(REF_DIR, `${safeName}_styles.json`);
 
       if (!fs.existsSync(screenshotPath)) {
         return JSON.stringify({
           success: false,
-          error: `No reference found with name '${name}'. Use capture_reference first.`,
+          error: `No reference found with name '${safeName}'. Use capture_reference first.`,
         });
       }
 
-      state.screenshots.set(name, screenshotPath);
+      state.screenshots.set(safeName, screenshotPath);
       if (fs.existsSync(stylesPath)) {
-        state.styles.set(name, JSON.parse(fs.readFileSync(stylesPath, "utf-8")));
+        state.styles.set(safeName, JSON.parse(fs.readFileSync(stylesPath, "utf-8")));
       }
     }
 
-    const refPath = state.screenshots.get(name)!;
-    const refStyles = state.styles.get(name) || {};
+    const refPath = state.screenshots.get(safeName)!;
+    const refStyles = state.styles.get(safeName) || {};
 
     // Capture current state
     const currentData = await captureScreenshot();
-    const currentPath = path.join(REF_DIR, `current_${name}.png`);
+    const currentPath = path.join(REF_DIR, `current_${safeName}.png`);
     fs.writeFileSync(currentPath, currentData);
 
     // Run diff
-    const diffPath = path.join(REF_DIR, `diff_${name}.png`);
+    const diffPath = path.join(REF_DIR, `diff_${safeName}.png`);
     const diffResult = await runPixelMatch(refPath, currentPath, diffPath, threshold);
 
     // Analyze problem areas

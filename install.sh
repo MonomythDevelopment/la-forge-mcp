@@ -2,7 +2,7 @@
 #
 # La Forge MCP - Local Installation Script
 # =========================================
-# "I can see things others can't."
+# A pixel-perfect visor for AI coding assistants.
 #
 # Run this after cloning the repository locally.
 #
@@ -27,7 +27,7 @@ echo " |______\__,_| |_|  \___/|_|  \__, |\___| "
 echo "                               __/ |      "
 echo "                              |___/   MCP "
 echo -e "${NC}"
-echo -e "${BLUE}\"I can see things others can't.\"${NC}"
+echo -e "${BLUE}A pixel-perfect visor for AI coding assistants.${NC}"
 echo ""
 
 # Get script directory
@@ -160,5 +160,5 @@ echo -e "  • quick_visual_check()        • compare_elements(selector, expect
 echo ""
 echo -e "${BLUE}Installation Location:${NC} $INSTALL_DIR"
 echo ""
-echo -e "${CYAN}\"It's not just what you look at, it's what you see.\"${NC}"
+echo -e "${CYAN}Seeing what AI can't.${NC}"
 echo ""
