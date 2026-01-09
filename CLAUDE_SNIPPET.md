@@ -15,7 +15,7 @@ when and how to use La Forge's visual debugging tools.
 
 ## Visual CSS Debugging with La Forge MCP
 
-You have access to `la-forge` MCP server for visual CSS debugging. Like Geordi La Forge's VISOR, it lets you see what you normally can't — the actual rendered visual state of CSS, not just the code.
+You have access to `la-forge` MCP server for visual CSS debugging. Like a visor, it lets you see what you normally can't — the actual rendered visual state of CSS, not just the code.
 
 ### Core Principle
 
@@ -115,4 +115,3 @@ header.main-header { height: 64px; }
 3. **Trust the diff** — If verification fails, the visual IS different, even if code looks right
 4. **Check the rule chain** — css_rules shows you exactly what's overriding what
 
-*"It's not just what you look at, it's what you see."*

@@ -1,8 +1,8 @@
 # La Forge MCP
 
-> *"I can see things others can't."* — Geordi La Forge
+> A pixel-perfect visor for AI coding assistants.
 
-A Model Context Protocol (MCP) server that gives AI coding assistants the visual perception they lack. Named after the *Enterprise*'s chief engineer who could see what others couldn't.
+A Model Context Protocol (MCP) server that gives AI coding assistants the visual perception they lack.
 
 ## The Problem
 
@@ -338,6 +338,4 @@ MIT — see [LICENSE](LICENSE)
 
 ## Why "La Forge"?
 
-Geordi La Forge, Chief Engineer of the *USS Enterprise-D*, was born blind but could see more than anyone else through his VISOR. This tool does the same for AI coding assistants — giving them the visual perception they lack to see what's really happening with your CSS.
-
-*"It's not just what you look at, it's what you see."*
+This tool gives AI coding assistants the visual perception they lack — like a visor that lets them see what's really happening with your CSS.

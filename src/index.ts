@@ -2,7 +2,7 @@
 /**
  * La Forge MCP Server
  * ===================
- * "I can see things others can't." - Geordi La Forge
+ * A pixel-perfect visor for AI coding assistants.
  *
  * A Model Context Protocol server for visual CSS debugging that provides:
  * - Screenshot capture and pixel-level diffing

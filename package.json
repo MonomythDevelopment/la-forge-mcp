@@ -1,7 +1,7 @@
 {
   "name": "la-forge-mcp",
   "version": "1.0.0",
-  "description": "MCP server for visual CSS debugging - seeing what AI can't",
+  "description": "A pixel-perfect visor for AI coding assistants - MCP server for visual CSS debugging",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
@@ -15,14 +15,28 @@
   },
   "keywords": [
     "mcp",
+    "model-context-protocol",
     "css",
     "debugging",
     "visual-testing",
     "chrome-devtools",
-    "claude-code"
+    "claude-code",
+    "ai-coding",
+    "screenshot-diff"
   ],
-  "author": "Monomyth Development",
+  "author": {
+    "name": "Monomyth Development",
+    "url": "https://monomyth.dev"
+  },
   "license": "MIT",
+  "homepage": "https://github.com/MonomythDevelopment/la-forge-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MonomythDevelopment/la-forge-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MonomythDevelopment/la-forge-mcp/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "sharp": "^0.33.0",
