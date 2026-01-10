@@ -10,11 +10,7 @@
 ```
 
 <p align="center">
-<strong>A pixel-perfect visor for AI coding assistants.</strong>
-</p>
-
-<p align="center">
-<code>░▒▓█ A PIXEL PERFECT VISOR FOR AI █▓▒░</code>
+<code>░▒▓█ A PIXEL PERFECT VISOR FOR AI CODING ASSISTANTS █▓▒░</code>
 </p>
 
 ---
@@ -361,11 +357,11 @@ MIT — see [LICENSE](LICENSE)
 ```
 ╔═══════════════════════════════════════════════════════════════════════════╗
 ║                                                                           ║
-║                         ░▒▓█ LA FORGE MCP █▓▒░                            ║
+║                               LA FORGE MCP                                ║
 ║                                                                           ║
-║                    A pixel-perfect visor for AI.                          ║
+║          ░▒▓█ A PIXEL PERFECT VISOR FOR AI CODING ASSISTANTS █▓▒░         ║
 ║                                                                           ║
-║                Made with ◉ by Monomyth Development                        ║
+║                    Made with ◉ by Monomyth Development                    ║
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 ```
