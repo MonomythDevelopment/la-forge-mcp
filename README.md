@@ -1,6 +1,23 @@
-# La Forge MCP
+```
+  _             ______
+ | |           |  ____|
+ | |     __ _  | |__ ___  _ __ __ _  ___
+ | |    / _` | |  __/ _ \| '__/ _` |/ _ \
+ | |___| (_| | | | | (_) | | | (_| |  __/
+ |______\__,_| |_|  \___/|_|  \__, |\___|
+                               __/ |
+                              |___/   MCP
+```
 
-> A pixel-perfect visor for AI coding assistants.
+<p align="center">
+<strong>A pixel-perfect visor for AI coding assistants.</strong>
+</p>
+
+<p align="center">
+<code>░▒▓█ A PIXEL PERFECT VISOR FOR AI █▓▒░</code>
+</p>
+
+---
 
 A Model Context Protocol (MCP) server that gives AI coding assistants the visual perception they lack.
 
@@ -8,17 +25,22 @@ A Model Context Protocol (MCP) server that gives AI coding assistants the visual
 
 When AI coding assistants (like Claude Code) work on CSS/HTML:
 - They can see the code, but can't truly "see" the rendered result
-- Screenshots are interpreted semantically, not pixel-precisely  
+- Screenshots are interpreted semantically, not pixel-precisely
 - CSS inheritance and cascade can cause unexpected results invisible in source code
 - A black screen might be reported as "looks good" because there's nothing to semantically parse
 
 ## The Solution
 
-La Forge provides:
-- **Pixel-level diffing** — Programmatic comparison that catches *any* visual difference
-- **Computed style extraction** — See what CSS is *actually* applied after cascade
-- **CSS rule chain analysis** — Find which rules are overriding your styles
-- **Problem region detection** — Automatically identify which areas differ
+```
+┌─ VISOR ONLINE ──────────────────────────────────────────────────────────┐
+│                                                                         │
+│  ◉ Pixel-level diffing         Catches ANY visual difference           │
+│  ◉ Computed style extraction   See what CSS is ACTUALLY applied        │
+│  ◉ CSS rule chain analysis     Find which rules override your styles   │
+│  ◉ Problem region detection    Automatically identify differing areas  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -335,3 +357,15 @@ rm -rf ~/.la-forge-mcp
 MIT — see [LICENSE](LICENSE)
 
 ---
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║                         ░▒▓█ LA FORGE MCP █▓▒░                            ║
+║                                                                           ║
+║                    A pixel-perfect visor for AI.                          ║
+║                                                                           ║
+║                Made with ◉ by Monomyth Development                        ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
