@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-06-03
+
+### Security
+- Fixed a path traversal vulnerability in `screenshot_element` ([#1](https://github.com/MonomythDevelopment/la-forge-mcp/issues/1)). The caller-controlled `output_name` was written to disk without sanitization, allowing traversal-bearing values (e.g. `x/../../foo`) to write PNG bytes outside the intended `la-forge-references` directory. Thanks to @gongyanyugyy for the detailed report and reproducible PoC.
+
+### Fixed
+- `screenshot_element` now passes `output_name` (and the selector-derived fallback) through `sanitizeName()`, consistent with the other reference-writing tools.
+
+### Added
+- Defense-in-depth `resolveInRefDir()` helper that resolves the final write path and rejects any write resolving outside `REF_DIR`, guarding reference writes against future sanitizer gaps.
+
 ## [1.1.0] - 2026-01-09
 
 ### Changed
