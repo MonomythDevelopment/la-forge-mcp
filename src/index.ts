@@ -106,6 +106,18 @@ function sanitizeName(name: string): string {
     .substring(0, 100);          // Limit length
 }
 
+// Defense-in-depth: resolve a file path and ensure it stays within REF_DIR.
+// Even with sanitizeName() applied, this guarantees no write escapes the
+// reference directory regardless of platform-specific path quirks.
+function resolveInRefDir(fileName: string): string {
+  const resolved = path.resolve(REF_DIR, fileName);
+  const refDirWithSep = REF_DIR.endsWith(path.sep) ? REF_DIR : REF_DIR + path.sep;
+  if (resolved !== REF_DIR && !resolved.startsWith(refDirWithSep)) {
+    throw new Error(`Refusing to write outside reference directory: ${fileName}`);
+  }
+  return resolved;
+}
+
 // =============================================================================
 // CDP (Chrome DevTools Protocol) Connection Utilities
 // =============================================================================
@@ -1191,10 +1203,11 @@ async function screenshotElement(
       },
     });
 
-    const name =
+    const name = sanitizeName(
       outputName ||
-      selector.replace(/\s/g, "_").replace(/\./g, "").replace(/#/g, "");
-    const filePath = path.join(REF_DIR, `element_${name}.png`);
+        selector.replace(/\s/g, "_").replace(/\./g, "").replace(/#/g, "")
+    );
+    const filePath = resolveInRefDir(`element_${name}.png`);
     fs.writeFileSync(filePath, Buffer.from(result.data as string, "base64"));
 
     return JSON.stringify({ success: true, path: filePath, bounds });
